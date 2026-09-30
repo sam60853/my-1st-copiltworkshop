@@ -89,7 +89,7 @@ function updateEmptyState(visibleTodos) {
   const emptyMessages = {
     all: '還沒有任何待辦事項,新增一個吧!',
     active: '沒有未完成的待辦事項。',
-    completed: '沒有已完成的待辦事項。',
+    completed: '目前沒有已完成的待辦事項；取消完成的項目仍在清單中，切換「全部」或「未完成」即可查看。',
   };
   emptyState.textContent = emptyMessages[currentFilter];
   emptyState.classList.add('visible');
