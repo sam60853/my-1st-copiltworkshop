@@ -258,12 +258,39 @@ input {
 }
 
 .todo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   margin-top: 18px;
   padding-top: 16px;
   border-top: 1px solid var(--border-color);
   color: var(--muted-color);
   font-weight: 700;
   text-align: right;
+}
+
+.clear-completed-btn {
+  border: 1px solid var(--danger-color);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: var(--danger-soft);
+  color: var(--danger-color);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.clear-completed-btn:hover:not(:disabled) {
+  background: var(--danger-hover);
+}
+
+.clear-completed-btn:disabled {
+  border-color: var(--border-color);
+  background: var(--surface-color);
+  color: var(--muted-color);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 @media (max-width: 480px) {
@@ -298,5 +325,14 @@ input {
 
   .delete-btn {
     padding: 7px 9px;
+  }
+
+  .todo-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #clearCompletedBtn {
+    width: 100%;
   }
 }
