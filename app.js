@@ -8,6 +8,7 @@ const addBtn = document.getElementById('addBtn');
 const todoList = document.getElementById('todoList');
 const emptyState = document.getElementById('emptyState');
 const todoCount = document.getElementById('todoCount');
+const clearCompletedBtn = document.getElementById('clearCompletedBtn');
 const themeToggle = document.getElementById('themeToggle');
 const filterButtons = document.querySelectorAll('.filter-btn');
 const THEME_STORAGE_KEY = 'todo-list-theme';
@@ -77,6 +78,11 @@ function saveTodos() {
 function updateTodoCount() {
   const remainingCount = todos.filter((todo) => !todo.completed).length;
   todoCount.textContent = `未完成: ${remainingCount} 項`;
+}
+
+// 沒有已完成項目時停用批次清除按鈕。
+function updateClearCompletedButton() {
+  clearCompletedBtn.disabled = !todos.some((todo) => todo.completed);
 }
 
 // 依照目前篩選結果顯示合適的空狀態提示。
@@ -149,6 +155,7 @@ function renderTodos() {
   });
 
   updateTodoCount();
+  updateClearCompletedButton();
   updateEmptyState(visibleTodos);
 }
 
@@ -207,8 +214,25 @@ function deleteTodo(id) {
   renderTodos();
 }
 
+// 確認後一次清除所有已完成項目。
+function clearCompletedTodos() {
+  if (!todos.some((todo) => todo.completed)) {
+    return;
+  }
+
+  const confirmed = window.confirm('確定要清除所有已完成的待辦事項嗎？此操作無法復原。');
+  if (!confirmed) {
+    return;
+  }
+
+  todos = todos.filter((todo) => !todo.completed);
+  saveTodos();
+  renderTodos();
+}
+
 // 事件綁定：新增按鈕與 Enter 鍵。
 addBtn.addEventListener('click', addTodo);
+clearCompletedBtn.addEventListener('click', clearCompletedTodos);
 
 todoInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
