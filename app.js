@@ -11,10 +11,13 @@ const todoCount = document.getElementById('todoCount');
 const clearCompletedBtn = document.getElementById('clearCompletedBtn');
 const themeToggle = document.getElementById('themeToggle');
 const filterButtons = document.querySelectorAll('.filter-btn');
+const FILTER_STORAGE_KEY = 'todo-list-filter';
+const FILTER_OPTIONS = ['all', 'active', 'completed'];
 const THEME_STORAGE_KEY = 'todo-list-theme';
 const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-let currentFilter = 'all';
+const savedFilter = localStorage.getItem(FILTER_STORAGE_KEY);
+let currentFilter = FILTER_OPTIONS.includes(savedFilter) ? savedFilter : 'all';
 
 // 套用深淺色主題，並更新切換按鈕內容。
 function applyTheme(theme) {
@@ -160,8 +163,13 @@ function renderTodos() {
 }
 
 filterButtons.forEach((button) => {
+  const isSelected = button.dataset.filter === currentFilter;
+  button.classList.toggle('active', isSelected);
+  button.setAttribute('aria-pressed', String(isSelected));
+
   button.addEventListener('click', () => {
     currentFilter = button.dataset.filter;
+    localStorage.setItem(FILTER_STORAGE_KEY, currentFilter);
     filterButtons.forEach((filterButton) => {
       const isSelected = filterButton === button;
       filterButton.classList.toggle('active', isSelected);
