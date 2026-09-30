@@ -14,7 +14,6 @@ const THEME_STORAGE_KEY = 'todo-list-theme';
 const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 let currentFilter = 'all';
-let filterFeedback = '';
 
 // 套用深淺色主題，並更新切換按鈕內容。
 function applyTheme(theme) {
@@ -82,12 +81,6 @@ function updateTodoCount() {
 
 // 依照目前篩選結果顯示合適的空狀態提示。
 function updateEmptyState(visibleTodos) {
-  if (filterFeedback) {
-    emptyState.textContent = filterFeedback;
-    emptyState.classList.add('visible');
-    return;
-  }
-
   if (visibleTodos.length > 0) {
     emptyState.classList.remove('visible');
     return;
@@ -95,7 +88,7 @@ function updateEmptyState(visibleTodos) {
 
   const emptyMessages = {
     all: '還沒有任何待辦事項,新增一個吧!',
-    active: '目前沒有未完成的待辦事項；已完成的項目不會顯示在此篩選中。',
+    active: '沒有未完成的待辦事項。',
     completed: '目前沒有已完成的待辦事項；取消完成的項目仍在清單中，切換「全部」或「未完成」即可查看。',
   };
   emptyState.textContent = emptyMessages[currentFilter];
@@ -162,7 +155,6 @@ function renderTodos() {
 filterButtons.forEach((button) => {
   button.addEventListener('click', () => {
     currentFilter = button.dataset.filter;
-    filterFeedback = '';
     filterButtons.forEach((filterButton) => {
       const isSelected = filterButton === button;
       filterButton.classList.toggle('active', isSelected);
@@ -189,7 +181,6 @@ function addTodo() {
   };
 
   todos.unshift(newTodo);
-  filterFeedback = '';
   saveTodos();
   renderTodos();
   todoInput.value = '';
@@ -198,11 +189,6 @@ function addTodo() {
 
 // 切換待辦完成狀態。
 function toggleTodo(id) {
-  const changedTodo = todos.find((todo) => todo.id === id);
-  filterFeedback = currentFilter === 'completed' && changedTodo && changedTodo.completed
-    ? '此項目已取消完成，僅被「已完成」篩選隱藏，並未刪除。切換「全部」即可查看。'
-    : '';
-
   todos = todos.map((todo) => {
     if (todo.id === id) {
       return { ...todo, completed: !todo.completed };
@@ -217,7 +203,6 @@ function toggleTodo(id) {
 // 刪除指定待辦事項。
 function deleteTodo(id) {
   todos = todos.filter((todo) => todo.id !== id);
-  filterFeedback = '';
   saveTodos();
   renderTodos();
 }
