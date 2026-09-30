@@ -11,6 +11,10 @@
       <section class="todo-card" aria-label="待辦清單">
         <header class="card-header">
           <h1>待辦清單</h1>
+          <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+            <span aria-hidden="true">🌙</span>
+            <span>深色模式</span>
+          </button>
         </header>
 
         <div class="input-row">
@@ -22,6 +26,12 @@
           />
           <button id="addBtn" type="button">新增</button>
         </div>
+
+        <nav class="filter-row" aria-label="待辦事項篩選">
+          <button class="filter-btn active" type="button" data-filter="all" aria-pressed="true">全部</button>
+          <button class="filter-btn" type="button" data-filter="active" aria-pressed="false">未完成</button>
+          <button class="filter-btn" type="button" data-filter="completed" aria-pressed="false">已完成</button>
+        </nav>
 
         <ul id="todoList" class="todo-list" aria-live="polite"></ul>
 
